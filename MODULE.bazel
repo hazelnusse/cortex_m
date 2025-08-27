@@ -108,15 +108,15 @@ bazel_dep(
     dev_dependency = True,
 )
 
-TOOLCHAINS_LLVM_COMMIT = "f1048a300d0be607c7f5092e323bc15b7ef8d8af"
+TOOLCHAINS_LLVM_COMMIT = "d0881e3d856e0f2fcfd6b3e498d6d290306efff2"
 
 archive_override(
     module_name = "toolchains_llvm",
-    integrity = "sha256-g9hKi+nAtM1ddbK9Ppkrx8LyY7K/Op3vSwopp2Kh85Y=",
+    integrity = "sha256-nzUIS1HbyTaw8xe/95FRsjxsYfrwu71obZVRm48LbXI=",
     strip_prefix = "toolchains_llvm-{commit}".format(
         commit = TOOLCHAINS_LLVM_COMMIT,
     ),
-    urls = ["https://github.com/bazel-contrib/toolchains_llvm/archive/{commit}.tar.gz".format(
+    urls = ["https://github.com/hazelnusse/toolchains_llvm/archive/{commit}.tar.gz".format(
         commit = TOOLCHAINS_LLVM_COMMIT,
     )],
 )
