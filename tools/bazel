@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GIT_ROOT="${BASH_SOURCE[0]%tools/bazel}"
-exec nix run ${NIX_OPTS:-} "git+file://${GIT_ROOT}?dir=tools/bazel-wrapper" -- "$@"
+WORKSPACE_ROOT="${BASH_SOURCE[0]%/tools/bazel}"
+TOOLS_DIR="${WORKSPACE_ROOT}/tools"
+BAZEL_WRAPPER="${TOOLS_DIR}/default.nix"
+
+BAZEL_WRAPPER_HASH=$(sha256sum "$BAZEL_WRAPPER")
+BAZEL_WRAPPER_HASH=${BAZEL_WRAPPER_HASH%% *}
+
+HASHED_OUT_LINK="${WORKSPACE_ROOT}/.bazel-wrapper/${BAZEL_WRAPPER_HASH}"
+
+if [[ ! -e "$HASHED_OUT_LINK" ]]; then
+    rm -rf "${WORKSPACE_ROOT}/.bazel-wrapper"
+    nix-build -v "$BAZEL_WRAPPER" --out-link "$HASHED_OUT_LINK"
+fi
+
+exec "$HASHED_OUT_LINK/bin/bazel-wrapper" "$@"
